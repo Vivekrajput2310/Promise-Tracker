@@ -1,0 +1,26 @@
+# Web framework
+fastapi==0.115.6
+uvicorn[standard]==0.32.1
+
+# Pydantic + settings
+pydantic==2.10.3
+pydantic-settings==2.6.1
+
+# Firebase Admin SDK
+firebase-admin==6.6.0
+
+# Google Gemini/Gemma SDK
+google-generativeai==0.8.3
+
+# Date parsing
+python-dateutil==2.9.0.post0
+
+# HTTP client (for tests)
+httpx==0.28.1
+
+# Testing
+pytest==8.3.4
+pytest-asyncio==0.24.0
+
+# ASGI test client
+anyio==4.7.0

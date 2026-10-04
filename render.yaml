@@ -1,0 +1,61 @@
+# render.yaml
+# ─────────────
+# Render deployment configuration for Promise Tracker backend.
+#
+# Usage:
+#   1. Push this file to GitHub in the `backend/` directory.
+#   2. In Render dashboard: New → Web Service → Connect repo.
+#   3. Set Root Directory to `backend/`.
+#   4. Render will auto-detect this file.
+#   5. Add environment variables in the Render dashboard (see .env.example).
+#
+# Important:
+#   - Do NOT set AI_PROVIDER=mock in production.
+#   - The PORT environment variable is automatically set by Render.
+#   - The rate limiter is per-process; see README for implications.
+
+services:
+  - type: web
+    name: promise-tracker-backend
+    runtime: python
+    plan: free          # change to starter/standard for production
+    region: oregon      # or nearest to your users
+
+    rootDir: backend
+
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+
+    healthCheckPath: /health
+
+    # Environment variables — set values in Render dashboard (never in this file)
+    envVars:
+      - key: ENVIRONMENT
+        value: production
+
+      - key: AI_PROVIDER
+        value: gemma          # override to "mock" only for testing
+
+      - key: GEMMA_API_KEY
+        sync: false           # secret — set in Render dashboard
+
+      - key: GEMMA_MODEL
+        value: gemma-3-27b-it
+
+      - key: FIREBASE_PROJECT_ID
+        sync: false           # secret — set in Render dashboard
+
+      - key: FIREBASE_CLIENT_EMAIL
+        sync: false           # secret — set in Render dashboard
+
+      - key: FIREBASE_PRIVATE_KEY
+        sync: false           # secret — set in Render dashboard (paste full key)
+
+      - key: ALLOWED_ORIGINS_RAW
+        sync: false           # set to your Vercel frontend URL
+
+      - key: CONFIDENCE_THRESHOLD
+        value: "0.4"
+
+      - key: RATE_LIMIT_PER_MINUTE
+        value: "10"
